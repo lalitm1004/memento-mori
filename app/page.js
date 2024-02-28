@@ -13,6 +13,7 @@ export default function Home() {
   
   const [input, setInput] = useState("");
   const [weeksLived, setWeeksLived] = useState(0);
+  const [progress, setProgress] = useState(0);
   const [valid, setValid] = useState(null);
   const [svgArray, setSvgArray] = useState(null);
 
@@ -54,7 +55,7 @@ export default function Home() {
         }
       }
 
-      if (year < today.getFullYear() - 78) {
+      if (year < today.getFullYear() - 79) {
         return (valid == null) ? null : false; 
       }
 
@@ -78,105 +79,118 @@ export default function Home() {
       const weeksPassed = Math.floor(differenceMs / (1000 * 60 * 60 * 24 * 7));
       return weeksPassed;
     }
-    setWeeksLived(weeksPassedSince(input));
+    setWeeksLived(0);
+    setTimeout(() => setWeeksLived(weeksPassedSince(input)), 1);
   }
 
   useEffect(() => {
-    const BG = "#EBE7B8"
-    const FILL = "#000000"
-    const STROKE = "#000000"
+    const main = async () => {
+      const setCalendar = (weeksLived) => {
 
-    const intialX = 55;
-    const initialY = 55;
-    const boxWidth = 25;
-    const gap = 10;
-    const moat = 50;
+        const BG = "#EBE7B8"
+        const FILL = "#000000"
+        const STROKE = "#000000"
 
-    let x_offset = 0;
-    let y_offset = 0;
+        const intialX = 55;
+        const initialY = 55;
+        const boxWidth = 25;
+        const gap = 10;
+        const moat = 50;
 
-    const rowsColored = Math.floor(weeksLived / 52);
-    const boxesColored = weeksLived - 52 * rowsColored;
-    const boxesBlank = 52 - boxesColored;
+        let x_offset = 0;
+        let y_offset = 0;
 
-    const localSvgArray = []
+        const rowsColored = Math.floor(weeksLived / 52);
+        const boxesColored = weeksLived - 52 * rowsColored;
+        const boxesBlank = 52 - boxesColored;
 
-    const getRectangle = (x, y, title, fill) => {
-      return (
-        <rect x={x} y={y} width={boxWidth} height={boxWidth} fill={(fill ? FILL : BG)} stroke={STROKE}><title>{title}</title></rect>
-      )
-    }
+        const localSvgArray = []
 
-    // Colored rows
-    for (let i = 0; i < rowsColored; i++) {
-      for (let j = 0; j < 52; j++) {
-        localSvgArray.push(getRectangle(
-          intialX + x_offset,
-          initialY + y_offset,
-          `Week ${i * 52 + j + 1}`,
-          true
-        ))
-        x_offset += boxWidth + gap;
+        const getRectangle = (x, y, title, fill) => {
+          return (
+            <rect x={x} y={y} width={boxWidth} height={boxWidth} fill={(fill ? FILL : BG)} stroke={STROKE}><title>{title}</title></rect>
+          )
+        }
+
+        // Colored rows
+        for (let i = 0; i < rowsColored; i++) {
+          for (let j = 0; j < 52; j++) {
+            localSvgArray.push(getRectangle(
+              intialX + x_offset,
+              initialY + y_offset,
+              `Week ${i * 52 + j + 1}`,
+              true
+            ))
+            x_offset += boxWidth + gap;
+          }
+          if ((i + 1) % 10 == 0) {
+            y_offset += moat + gap;
+          } else {
+            y_offset += boxWidth + gap;
+          }
+          x_offset = 0;
+        }
+
+        // For colored boxes in carryover row
+        for (let i = 0; i < boxesColored; i++) {
+          localSvgArray.push(getRectangle(
+            intialX + x_offset,
+            initialY + y_offset,
+            `Week ${rowsColored * 52 + i + 1}`,
+            true
+          ))
+          x_offset += boxWidth + gap;
+        }
+
+        // Empty boxes in carryover row
+        for (let i = 0; i < boxesBlank; i++) {
+          localSvgArray.push(getRectangle(
+            intialX + x_offset,
+            initialY + y_offset,
+            `Week ${rowsColored * 52 + boxesColored + i + 1}`,
+            false,
+          ));
+          x_offset += boxWidth + gap;
+        }
+
+        if ((rowsColored + 1) % 10 == 0) {
+          y_offset += moat + gap;
+        } else {
+          y_offset += boxWidth + gap;
+        }
+        x_offset = 0;
+
+        // Remaining empty rows
+        let emptyRowNum = 1;
+        for (let i = rowsColored + 1; i < 80; i++) {
+          for (let j = 0; j < 52; j++) {
+            localSvgArray.push(getRectangle(
+              intialX + x_offset,
+              initialY + y_offset,
+              `Week ${(rowsColored + emptyRowNum) * 52 + j + 1}`,
+              false
+            ));
+            x_offset += boxWidth + gap;
+          }
+          if ((i + 1) % 10 == 0) {
+            y_offset += moat + gap;
+          } else {
+            y_offset += boxWidth + gap;
+          }
+          x_offset = 0;
+          emptyRowNum += 1
+        }
+        setSvgArray(localSvgArray);
       }
-      if ((i + 1) % 10 == 0) {
-        y_offset += moat + gap;
-      } else {
-        y_offset += boxWidth + gap;
+
+      const stepSize = 8;
+      for (let i = 0; i <= weeksLived; i = i + ((weeksLived - i > stepSize) ? stepSize : 1)) {
+        await new Promise(r => setTimeout(r, 1));
+        setCalendar(i);
+        setProgress(i);
       }
-      x_offset = 0;
     }
-
-    // For colored boxes in carryover row
-    for (let i = 0; i < boxesColored; i++) {
-      localSvgArray.push(getRectangle(
-        intialX + x_offset,
-        initialY + y_offset,
-        `Week ${rowsColored * 52 + i + 1}`,
-        true
-      ))
-      x_offset += boxWidth + gap;
-    }
-
-    // Empty boxes in carryover row
-    for (let i = 0; i < boxesBlank; i++) {
-      localSvgArray.push(getRectangle(
-        intialX + x_offset,
-        initialY + y_offset,
-        `Week ${rowsColored * 52 + boxesColored + i + 1}`,
-        false,
-      ));
-      x_offset += boxWidth + gap;
-    }
-
-    if ((rowsColored + 1) % 10 == 0) {
-      y_offset += moat + gap;
-    } else {
-      y_offset += boxWidth + gap;
-    }
-    x_offset = 0;
-
-    // Remaining empty rows
-    let emptyRowNum = 1;
-    for (let i = rowsColored + 1; i < 80; i++) {
-      for (let j = 0; j < 52; j++) {
-        localSvgArray.push(getRectangle(
-          intialX + x_offset,
-          initialY + y_offset,
-          `Week ${(rowsColored + emptyRowNum) * 52 + j + 1}`,
-          false
-        ));
-        x_offset += boxWidth + gap;
-      }
-      if ((i + 1) % 10 == 0) {
-        y_offset += moat + gap;
-      } else {
-        y_offset += boxWidth + gap;
-      }
-      x_offset = 0;
-      emptyRowNum += 1
-    }
-
-    setSvgArray(localSvgArray);
+    main();
   }, [weeksLived])
 
   return (
@@ -184,10 +198,10 @@ export default function Home() {
       <div className={`${noto.className} overflow-hidden`}>
 
         <div className="flex flex-col justify-center items-center mb-4">
-          <h1 className="text-black text-6xl my-5">Memento Mori</h1>
+          <h1 className="text-black my-5 text-4xl md:text-7xl">Memento Mori</h1>
           <Progress
-            className="w-[40%] h-[10px]"
-            value={weeksLived / (52 * 80) * 100}
+            className="w-[75%] md:w-[40%] h-[10px]"
+            value={progress / (52 * 80) * 100}
           />
         </div>
 
@@ -223,8 +237,8 @@ export default function Home() {
           className="flex justify-center w-full"
         >
           <svg 
-            viewbox="0 0 1920 3070"
-            className={`w-[40%]`}
+            viewBox="0 0 1920 3070"
+            className={`w-[75%] md:w-[40%]`}
           >
             {svgArray && svgArray.map(x => x)}
           </svg>

@@ -5,6 +5,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Memento Mori",
+  description: "Remember you must die",
 };
 
 export default function RootLayout({ children }) {
