@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Skull } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
 const noto = Noto_Serif_Khojki({subsets: ["latin"]});
 
@@ -108,9 +109,9 @@ export default function Home() {
 
         const localSvgArray = []
 
-        const getRectangle = (x, y, title, fill) => {
+        const getRectangle = (x, y, week, fill) => {
           return (
-            <rect x={x} y={y} width={boxWidth} height={boxWidth} fill={(fill ? FILL : BG)} stroke={STROKE}><title>{title}</title></rect>
+            <rect id={week} x={x} y={y} width={boxWidth} height={boxWidth} fill={(fill ? FILL : BG)} stroke={STROKE}><title>{`Week ${week}`}</title></rect>
           )
         }
 
@@ -120,7 +121,7 @@ export default function Home() {
             localSvgArray.push(getRectangle(
               intialX + x_offset,
               initialY + y_offset,
-              `Week ${i * 52 + j + 1}`,
+              i * 52 + j + 1,
               true
             ))
             x_offset += boxWidth + gap;
@@ -138,7 +139,7 @@ export default function Home() {
           localSvgArray.push(getRectangle(
             intialX + x_offset,
             initialY + y_offset,
-            `Week ${rowsColored * 52 + i + 1}`,
+            rowsColored * 52 + i + 1,
             true
           ))
           x_offset += boxWidth + gap;
@@ -149,7 +150,7 @@ export default function Home() {
           localSvgArray.push(getRectangle(
             intialX + x_offset,
             initialY + y_offset,
-            `Week ${rowsColored * 52 + boxesColored + i + 1}`,
+            rowsColored * 52 + boxesColored + i + 1,
             false,
           ));
           x_offset += boxWidth + gap;
@@ -169,7 +170,7 @@ export default function Home() {
             localSvgArray.push(getRectangle(
               intialX + x_offset,
               initialY + y_offset,
-              `Week ${(rowsColored + emptyRowNum) * 52 + j + 1}`,
+              (rowsColored + emptyRowNum) * 52 + j + 1,
               false
             ));
             x_offset += boxWidth + gap;
@@ -212,7 +213,8 @@ export default function Home() {
             transition={{
               ease: "easeInOut"
             }}
-          >
+          > 
+            
             <Progress
               className="w-[75%] md:w-[40%] h-[10px]"
               value={(showProgress) ? progress / (52 * 80) * 100 : 100}
@@ -222,19 +224,23 @@ export default function Home() {
         </div>
 
         <motion.div
-          className="w-full flex justify-center items-center"
+          className="w-full flex flex-row justify-center items-center"
           initial={{translateX:56/2}}
           animate={{
             translateX: (valid) ? [56/2, 0] : ((valid == null) ? [56/2] : [0, 56/2])
           }}
         >
-          <Input
-            className="h-[65px] w-[200px] z-20 bg-cream opacity-100 border border-black mr-2 text-xl"
-            placeholder="DD/MM/YYYY"
-            onChange={handleInput}
-          />
+          <div className="flex h-full flex-col items-center">
+            <Label htmlFor="birthday" className='text-left w-full ml-2 mb-1'>Enter your birthday</Label>
+            <Input
+              id="birthday"
+              className="h-[65px] w-[200px] z-20 bg-cream opacity-100 border border-black mr-2 text-xl"
+              placeholder="DD/MM/YYYY"
+              onChange={handleInput}
+            />
+          </div>
           <motion.div
-            className="border border-black rounded-full z-10"
+            className="border mt-[16px] h-full border-black rounded-full z-10"
             initial={{translateX: -70}}
             animate={{
               translateX: (valid) ? [-70, 0] : ((valid == null) ? [-70] : [0, -70])
