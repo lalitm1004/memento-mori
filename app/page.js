@@ -201,27 +201,23 @@ export default function Home() {
 
         <div className="flex flex-col justify-center items-center mb-4">
           <h1 className="text-black my-5 text-4xl md:text-7xl">Memento Mori</h1>
-          {showProgress ? (
-            <motion.div
-              className="sex w-full flex justify-center"
-              initial={{
-                scaleY: 0
-              }}
-              animate={{
-                scaleY: [0 , (showProgress) ? 1 : 0]
-              }}
-              transition={{
-                ease: "easeInOut"
-              }}
-            >
-              <Progress
-                className="w-[75%] md:w-[40%] h-[10px]"
-                value={progress / (52 * 80) * 100}
-              />
-            </motion.div>
-          ) : (
-            <div className="h-[1px] w-[75%] md:w-[40%] border border-black"></div>
-          )}
+          <motion.div
+            className="sex w-full flex justify-center"
+            initial={{
+              scaleY: 0.2
+            }}
+            animate={{
+              scaleY: [0.2 , (showProgress) ? 1 : 0.2]
+            }}
+            transition={{
+              ease: "easeInOut"
+            }}
+          >
+            <Progress
+              className="w-[75%] md:w-[40%] h-[10px]"
+              value={(showProgress) ? progress / (52 * 80) * 100 : 100}
+            />
+          </motion.div>
           
         </div>
 
