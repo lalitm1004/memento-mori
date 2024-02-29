@@ -196,10 +196,36 @@ export default function Home() {
     main();
   }, [weeksLived])
 
+  useEffect(() => {
+    const button = document.getElementById("submit-button");
+    const handleKeyDown = (event) => {
+      console.log("keydown")
+      if (event.key === "Enter") {
+        console.log("enter")
+        console.log(valid);
+        if (valid) {
+          console.log("valid")
+          button.click();
+        }
+      }
+    }
+
+
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+
+  }, [valid])
+
+  useEffect(() => {
+    // Select input field
+    const input = document.getElementById("birthday");
+    input.select();
+  }, [])
+
   return (
     <main>
       <div className={`${noto.className} overflow-hidden`}>
-
         <div className="flex flex-col justify-center items-center mb-4">
           <h1 className="text-black my-5 text-4xl md:text-7xl">Memento Mori</h1>
           <motion.div
@@ -214,15 +240,12 @@ export default function Home() {
               ease: "easeInOut"
             }}
           > 
-            
             <Progress
               className="w-[75%] md:w-[40%] h-[10px]"
               value={(showProgress) ? progress / (52 * 80) * 100 : 100}
             />
           </motion.div>
-          
         </div>
-
         <motion.div
           className="w-full flex flex-row justify-center items-center"
           initial={{translateX:56/2}}
@@ -247,14 +270,15 @@ export default function Home() {
             }}
           >
             <Button
+              id="submit-button"
               className="bg-inherit h-[56px] w-[56px] hover:bg-inherit hover:opacity-30 active:opacity-20 flex justify-center items-center"
               onClick={handleClick}
+              disabled={(progress !== 0) && (progress !== weeksLived)}
             >
               <Skull color="#000000"/>
             </Button>
           </motion.div>
         </motion.div>
-
         <motion.div
           className="flex justify-center w-full"
         >
@@ -265,7 +289,6 @@ export default function Home() {
             {svgArray && svgArray.map(x => x)}
           </svg>
         </motion.div>
-
       </div>
     </main>  
   );
