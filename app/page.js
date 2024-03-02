@@ -230,11 +230,9 @@ export default function Home() {
           <h1 className="text-black my-5 text-4xl md:text-7xl">Memento Mori</h1>
           <motion.div
             className="sex w-full flex justify-center"
-            initial={{
-              scaleY: 0.2
-            }}
             animate={{
-              scaleY: [0.2 , (showProgress) ? 1 : 0.2]
+              scaleY: [0.2 , (showProgress) ? 1 : 0.2],
+              translateY: (showProgress) ? [0, 5] : [0]
             }}
             transition={{
               ease: "easeInOut"
