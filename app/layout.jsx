@@ -1,17 +1,20 @@
-import { Inter } from "next/font/google";
+import { Noto_Serif_Khojki } from "next/font/google";
+
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const noto = Noto_Serif_Khojki({subsets: ["latin"]});
 
 export const metadata = {
   title: "Memento Mori",
   description: "Remember you must die",
 };
 
+
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-cream`}>{children}</body>
+      <body className={`${noto.className} bg-cream`}>{children}{" "}</body>
     </html>
   );
 }

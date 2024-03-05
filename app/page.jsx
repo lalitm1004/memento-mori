@@ -1,14 +1,13 @@
 "use client";
 import { motion } from "framer-motion";
 import { Progress } from "@/components/ui/progress";
-import { Noto_Serif_Khojki } from "next/font/google";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Skull } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import Link from "next/link";
 
-const noto = Noto_Serif_Khojki({subsets: ["latin"]});
 
 export default function Home() {
   
@@ -225,11 +224,11 @@ export default function Home() {
 
   return (
     <main>
-      <div className={`${noto.className} overflow-hidden`}>
+      <div className={`overflow-hidden`}>
         <div className="flex flex-col justify-center items-center mb-4">
           <h1 className="text-black my-5 text-4xl md:text-7xl">Memento Mori</h1>
           <motion.div
-            className="sex w-full flex justify-center"
+            className="sex w-full flex flex-col justify-center items-center"
             animate={{
               scaleY: [0.2 , (showProgress) ? 1 : 0.2],
               translateY: (showProgress) ? [0, 5] : [0]
@@ -243,6 +242,25 @@ export default function Home() {
               value={(showProgress) ? progress / (52 * 80) * 100 : 100}
             />
           </motion.div>
+            <motion.div
+              className={`w-[75%] md:w-[40%] px-1 flex justify-between`}
+              animate={{
+                translateY: (showProgress) ? [0,5] : [0]
+              }}
+              transition={{
+                ease: "easeInOut"
+              }}
+            >
+              <div className={`w-1/3 flex justify-center items-center`}>
+                <Link href={"/year"} className="opacity-85 hover:opacity-50">Year</Link>
+              </div>
+              {/* <div className={`w-1/3 flex justify-center items-center`}>
+                <Link href={"/sex"} className="opacity-85 hover:opacity-50">Year</Link>
+              </div> */}
+              <div className={`w-1/3 flex justify-center items-center`}>
+                <Link href={"https://github.com/lalitm1004/memento-mori"} target="_blank" className="opacity-85 hover:opacity-50">Github</Link>
+              </div>
+            </motion.div>
         </div>
         <motion.div
           className="w-full flex flex-row justify-center items-center"
