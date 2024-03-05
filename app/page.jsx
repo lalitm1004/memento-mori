@@ -10,7 +10,7 @@ import Link from "next/link";
 
 
 export default function Home() {
-  
+
   const [input, setInput] = useState("");
   const [weeksLived, setWeeksLived] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -19,54 +19,54 @@ export default function Home() {
   const [showProgress, setShowProgress] = useState(false);
 
   const handleInput = (event) => {
-    
+
     const checkValidity = (dateString) => {
       const dateFormat = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
 
       if (!dateFormat.test(dateString)) {
-        return (valid == null) ? null : false; 
+        return (valid == null) ? null : false;
       }
-      
+
       let [, day, month, year] = dateString.match(dateFormat);
-  
+
       day = parseInt(day, 10);
       month = parseInt(month, 10);
       year = parseInt(year, 10);
-      
+
       if (month < 1 || month > 12) {
-        return (valid == null) ? null : false; 
+        return (valid == null) ? null : false;
       }
 
       if (day < 1 || day > 31) {
-        return (valid == null) ? null : false; 
+        return (valid == null) ? null : false;
       }
-      
+
       const today = new Date()
       if (year > today.getFullYear()) {
-        return (valid == null) ? null : false; 
+        return (valid == null) ? null : false;
       }
-      
+
       if (year == today.getFullYear()) {
         if (month > today.getMonth() + 1) {
-          return (valid == null) ? null : false; 
+          return (valid == null) ? null : false;
         } else if (month == today.getMonth() + 1) {
           if (day > today.getDate()) {
-            return (valid == null) ? null : false; 
-          } 
+            return (valid == null) ? null : false;
+          }
         }
       }
 
       if (year < today.getFullYear() - 79) {
-        return (valid == null) ? null : false; 
+        return (valid == null) ? null : false;
       }
 
       const daysInMonth = new Date(year, month, 0).getDate();
       if (day > daysInMonth) {
-        return (valid == null) ? null : false; 
+        return (valid == null) ? null : false;
       }
 
       return true;
-    } 
+    }
 
     setValid(checkValidity(event.target.value));
     setInput(event.target.value);
@@ -209,15 +209,12 @@ export default function Home() {
       }
     }
 
-
-
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
 
   }, [valid])
 
   useEffect(() => {
-    // Select input field
     const input = document.getElementById("birthday");
     input.select();
   }, [])
@@ -236,7 +233,7 @@ export default function Home() {
             transition={{
               ease: "easeInOut"
             }}
-          > 
+          >
             <Progress
               className="w-[75%] md:w-[40%] h-[10px]"
               value={(showProgress) ? progress / (52 * 80) * 100 : 100}
@@ -254,9 +251,6 @@ export default function Home() {
               <div className={`w-1/3 flex justify-center items-center`}>
                 <Link href={"/year"} className="opacity-85 hover:opacity-50">Year</Link>
               </div>
-              {/* <div className={`w-1/3 flex justify-center items-center`}>
-                <Link href={"/sex"} className="opacity-85 hover:opacity-50">Year</Link>
-              </div> */}
               <div className={`w-1/3 flex justify-center items-center`}>
                 <Link href={"https://github.com/lalitm1004/memento-mori"} target="_blank" className="opacity-85 hover:opacity-50">Github</Link>
               </div>
@@ -298,7 +292,7 @@ export default function Home() {
         <motion.div
           className="flex justify-center w-full"
         >
-          <svg 
+          <svg
             viewBox="0 0 1920 3070"
             className={`w-[75%] md:w-[40%]`}
           >
@@ -306,6 +300,6 @@ export default function Home() {
           </svg>
         </motion.div>
       </div>
-    </main>  
+    </main>
   );
 }

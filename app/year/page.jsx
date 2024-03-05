@@ -6,7 +6,6 @@ export default function Year() {
   const [msPassed, setMsPassed] = useState(null);
   const [msTotal, setMsTotal] = useState(null);
   const [percentage, setPercentage] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const currentYear = new Date().getFullYear();
@@ -21,14 +20,11 @@ export default function Year() {
   }, [])
 
   useEffect(() => {
-
     const updateIntervalMs = 1;
-
     const intervalId = setInterval(() => {
       setPercentage((msPassed / msTotal) * 100)
       setMsPassed(prev => prev + updateIntervalMs);
     }, updateIntervalMs)
-
     return () => clearInterval(intervalId);
   }, [msPassed, msTotal])
 
