@@ -252,7 +252,7 @@ export default function Home() {
                 <Link href={"/year"} className="opacity-85 hover:opacity-50">Year</Link>
               </div>
               <div className={`w-1/3 flex justify-center items-center`}>
-                <Link href={"https://github.com/lalitm1004/memento-mori"} target="_blank" className="opacity-85 hover:opacity-50">Github</Link>
+                <Link href={"https://github.com/lalitm1004"} target="_blank" className="opacity-85 hover:opacity-50">Github</Link>
               </div>
             </motion.div>
         </div>
