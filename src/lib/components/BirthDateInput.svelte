@@ -1,5 +1,6 @@
 <script lang="ts">
-    import checkDateValidity from "$lib/utils/checkDateValidity";
+    import { BirthDateStore } from "$lib/store/BirthDateStore";
+    import checkDateValidity, { parseDate } from "$lib/utils/checkDateValidity";
     import { Button, Label } from "bits-ui";
     import gsap from "gsap";
 
@@ -40,6 +41,15 @@
             animateElements(isDateValid);
         }
     });
+
+    const handleSubmit = () => {
+        if (isDateValid) {
+            const { day, month, year } = parseDate(birthDate)!;
+            BirthDateStore.set(new Date(year, month - 1, day));
+        } else {
+            BirthDateStore.set(null);
+        }
+    };
 </script>
 
 <form class={`relative w-50 flex flex-col`}>
@@ -69,6 +79,8 @@
         >
             <Button.Root
                 id={`submit-button`}
+                onclick={handleSubmit}
+                disabled={!isDateValid}
                 class={`h-12 aspect-square bg-transparent hover:bg-neutral-800/10 grid place-items-center border rounded-full cursor-pointer transition-colors duration-200`}
             >
                 {@render skullSvg()}
