@@ -8,6 +8,7 @@
 <svelte:head>
 	<title>Memento Mori</title>
 	<link rel="icon" href={favicon} />
+	<meta name="description" content="Remember you must die." />
 </svelte:head>
 
 {@render children()}
